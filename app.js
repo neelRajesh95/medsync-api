@@ -212,6 +212,7 @@ app.get("/patients/:patient_id/vitals/latest", async (req, res) => {
       await redisClient.setEx(cacheKey, 60, JSON.stringify(rows));
     }
 
+    
     res.json({
       success: true,
       data: rows,
