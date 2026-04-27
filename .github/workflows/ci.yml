@@ -1,0 +1,38 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Run tests (if present)
+      - name: Run tests
+        run: |
+          if npm run | grep -q "test"; then
+            npm test
+          else
+            echo "No tests found, skipping..."
+          fi
+
+      # 5. Build Docker image
+      - name: Build Docker image
+        run: docker build -t medsync-app .
